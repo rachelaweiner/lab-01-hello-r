@@ -1,0 +1,114 @@
+---
+title: "Lab 01 - Hello R"
+author: "Rachel Weiner"
+date: "January 15, 2026"
+output: 
+  html_document: 
+    fig_width: 6
+    fig_height: 6
+    highlight: kate
+    theme: cerulean
+---
+
+## Load packages and data
+
+```{r load-packages, message=FALSE}
+library(tidyverse) 
+library(datasauRus)
+data("datasaurus_dozen")
+```
+
+## Exercises
+
+### Exercise 1
+
+```{r}
+data("datasaurus_dozen")
+datasaurus_dozen %>%
+  count(dataset) %>%
+  print()
+```
+
+There are two columns and thirteen rows in the dino data set as displayed above.
+
+### Exercise 2
+
+Here comes the dino data!
+
+```{r plot-dino, fig.height=3, fig.width=6}
+dino_data <- datasaurus_dozen %>%
+  filter(dataset == "dino")
+
+ggplot(data = dino_data, mapping = aes(x = x, y = y)) +
+  geom_point()
+```
+
+This data resembles an image of a dinosaur! Now let's find the correlation coefficient between x and y.
+
+```{r cor-dino}
+dino_data %>%
+  summarize(r = cor(x, y))
+```
+
+The correlation coefficient between x and y is -0.06447185. This r value suggests that there is a very weak, negative correlation between x and y.
+
+### Exercise 3
+
+Star time! 
+
+```{r plot-star, fig.height=3, fig.width=6}
+star_data <- datasaurus_dozen %>%
+  filter(dataset == "star")
+
+ggplot(data = star_data, mapping = aes(x = x, y = y)) +
+  geom_point()
+```
+
+This data resembles a star! The points make up sharp lines and corners. Lets see how this data set relates to the dino data set.
+
+```{r cor-star}
+star_data %>%
+  summarize(r = cor(x, y))
+```
+
+The correlation coefficient between x and y was found to be -0.0630. This r value is very similar and close in value to the correlation from the dino data. Though the star data set produced a slightly stronger negative correlation than the dino data but only minimally. Both the star data and the dino data appear to have similar weak correlations between x and y. Though they do produce pretty images!
+
+### Exercise 4
+
+Now that we have a dinosaur and a star, lets try one more... any guesses?
+
+```{r plot-circle, fig.height=3, fig.width=6}
+circle_data <- datasaurus_dozen %>%
+  filter(dataset == "circle")
+
+ggplot(data = circle_data, mapping = aes(x = x, y = y)) +
+  geom_point()
+```
+
+A circle! This image incorporates more rounded edges than the star image and clearly represents a circular shape. Next, lets find the correlation coefficient for this third image.
+
+```{r cor-circle}
+circle_data %>%
+  summarize(r = cor(x, y))
+```
+
+The correlation coefficient between x and y in the cirlce data was found to be -.0683. This value is again quite similar to the r values of the two data sets above. The circle and star data set correlations are most similar and slightly stronger than the dinosaur data set but all relatively similar.
+
+### Exercise 5
+
+Now for my final trick!
+
+```{r fig.height=8, fig.width=5}
+ggplot(datasaurus_dozen, aes(x = x, y = y, color = dataset)) +
+  geom_point() +
+  facet_wrap(~dataset, ncol = 3) +
+  theme(legend.position = "none")
+ 
+datasaurus_dozen %>%
+  group_by(dataset) %>%
+  summarize(r = cor(x, y)) %>%
+  print(n=13)
+```
+Now that we have all data sets plotted and their respective correlation coefficients, we are done! It is very interesting how similar each correlation coefficient is to the others despite each data set creating a different image. How cool!
+
+Thank you for your time and have a wonderful day! :) 
